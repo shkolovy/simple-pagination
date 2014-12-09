@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+	<title></title>
+	<link href="bootstrap.min.css" rel="stylesheet" />
+	<style>
+		.pagination.disabled a,
+		.pagination.disabled a:hover,
+		.pagination.disabled a:focus,
+		.pagination.disabled span {
+			color: #eee;
+			background: #fff;
+			cursor: default;
+		}
+
+		.pagination {
+			float: left;
+		}
+
+		.pagination.disabled li.active a {
+			color: #fff;
+			background: #cccccc;
+			border-color: #cccccc;
+		}
+
+		.paging-container select{
+			float: left;
+			margin: 20px 0 20px 10px;
+			padding: 9px 3px;
+			border-color: #ddd;
+			border-radius: 4px;
+		}
+
+		#table {
+			margin-bottom: 0;
+		}
+	</style>
+
+	<script src="jquery.min.js"></script>
+	<script src="pagination.js"></script>
+<script>
+
+	$(function () {
+			for (var i = 1; i < 202; i++) {
+				$('#table').append('<tr class="data"><td>' + i + '</td><td>Some title</td><td>Some Description</td></tr>');
+			}
+
+			load = function() {
+				window.tp = new Pagination('#tablePaging', {
+					itemsCount: 201,
+					onPageSizeChange: function (ps) {
+						console.log('changed to ' + ps);
+					},
+					onPageChange: function (paging) {
+						//custom paging logic here
+						console.log(paging);
+						var start = paging.pageSize * (paging.currentPage - 1),
+							end = start + paging.pageSize,
+							$rows = $('#table').find('.data');
+
+						$rows.hide();
+
+						for (var i = start; i < end; i++) {
+							$rows.eq(i).show();
+						}
+					}
+				});
+			}
+
+		load();
+	});
+	</script>
+</head>
+<body>
+	<form id="form1">
+		<table id="table" style="width: 800px" class="table table-bordered">
+			<tr>
+				<th>#
+				</th>
+				<th>Name 
+				</th>
+				<th>Desc
+				</th>
+			</tr>
+		</table>
+		<div class="paging-container" id="tablePaging">
+		</div>
+		<div style="clear: both"></div>
+		<a href="javascipt:void(0)" onclick="load()">reload</a> |
+	<a href="javascipt:void(0)" onclick="tp.disable()">disble paging</a> |
+	<a href="javascipt:void(0)" onclick="tp.enable()">enable paging</a>
+	</form>
+</body>
+</html>
